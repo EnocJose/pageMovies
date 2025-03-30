@@ -3,7 +3,7 @@ const { Schema, model } = require('mongoose');
 const MediaSchema = new Schema({
     serial: { type: String, required: true, unique: true },
     title: { type: String, required: true },
-    synopsis: { type: String },
+    synopsis: { type: String, required: true },
     movieUrl: { type: String, required: true, unique: true },
     coverImage: { type: String }, // Assuming this will store a URL to the image
     createdAt: { type: Date, default: Date.now },

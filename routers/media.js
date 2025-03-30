@@ -6,8 +6,10 @@ const router = Router();
 
 router.post('/', [
     check('title', 'invalid.title').not().isEmpty(),
+    check('synopsis', 'invalid.sypnosis').not().isEmpty(),
     check('movieUrl', 'invalid.movieUrl').not().isEmpty().isURL(),
     check('releaseYear', 'invalid.releaseYear').not().isEmpty().isInt(),
+    check('coverImage','invalid.coverImage').not().isEmpty(),
     check('mainGenre', 'invalid.mainGenre').not().isEmpty().isMongoId(),
     check('mainDirector', 'invalid.mainDirector').not().isEmpty().isMongoId(),
     check('producer', 'invalid.producer').not().isEmpty().isMongoId(),
@@ -27,7 +29,9 @@ router.post('/', [
     let media = new Media();
     media.serial = new Media()._id;
     media.title = req.body.title;
+    media.synopsis = req.body.synopsis;
     media.movieUrl = req.body.movieUrl;
+    media.coverImage = req.body.coverImage;
     media.releaseYear = req.body.releaseYear;
     media.mainGenre = req.body.mainGenre;
     media.mainDirector = req.body.mainDirector;
@@ -60,10 +64,27 @@ router.get('/', async function(req, res) {
     }
 });
 
+router.get('/:serialId', async function(req, res) {
+    try {
+        let media = await Media.findOne({ serial: req.params.serialId });
+
+        res.send(media);
+        if (!media) {
+            return res.status(404).json({ message: 'Media not found' });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('message error');
+    }
+});
+
+
 router.put('/:serialId', [
     check('title', 'invalid.title').not().isEmpty(),
+    check('synopsis', 'invalid.sypnosis').not().isEmpty(),
     check('movieUrl', 'invalid.movieUrl').not().isEmpty().isURL(),
     check('releaseYear', 'invalid.releaseYear').not().isEmpty().isInt(),
+    check('coverImage','invalid.coverImage').not().isEmpty(),
 ], async function(req, res) {
     
     try {
@@ -82,6 +103,8 @@ router.put('/:serialId', [
         media.title = req.body.title;
         media.movieUrl = req.body.movieUrl;
         media.releaseYear = req.body.releaseYear;
+        media.coverImage = req.body.coverImage;
+        media.synopsis = req.body.synopsis;
         media.updatedAt = new Date();
         
         media = await media.save();

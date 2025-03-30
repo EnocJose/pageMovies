@@ -21,6 +21,7 @@ router.post('/', [
 
         let director = new Director();
         director.id = new Director()._id;
+        director.coverImage = req.body.coverImage
         director.name = req.body.name;
         director.state = req.body.state;
         director.createdAt =new Date();
@@ -59,11 +60,7 @@ router.put('/:directorId', [
             return res.status(404).json({ message: 'Director no esta registrado' });
         }
 
-        const directorExists = await Director.findOne({ name: req.body.name });
-        if (directorExists) {
-            return res.status(400).json({ message: 'El director ya existe' });
-        }
-
+        director.coverImage = req.body.coverImage
         director.name = req.body.name;
         director.state = req.body.state;
         director.updatedAt =new Date();

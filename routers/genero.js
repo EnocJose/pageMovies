@@ -23,6 +23,7 @@ router.post('/', [
             genero.id = new Genero()._id;
             genero.name = req.body.name;
             genero.state = req.body.state;
+            genero.coverImage = req.body.coverImage
             genero.createdAt =new Date();
             genero.updatedAt =new Date();
             genero.description = req.body.description;
@@ -36,40 +37,48 @@ router.post('/', [
 });
 
 router.get('/', async function (req, res) {
+
     try {
+
         const generos = await Genero.find();
         res.send(generos);
+        
     } catch (error) {
         console.log(error);
         res.status(500).send('Error en el servidor');
     }
 });
+
+
 router.put('/:generoId', [
     check('name', 'invalid.name').not().isEmpty(),
     check('state', 'invalid.state').not().isEmpty().isIn(['Activo', 'Inactivo']),
+
 ], async function (req, res) {
+
     try {
+
         const errors = validationResult(req);
+
         if (!errors.isEmpty()) {
             return res.status(400).json({ message: errors.array() });
         }
 
-        let genero = await Genero.findById(req.params.generoId);
+        let genero = await Genero.findById({_id:req.params.generoId});
+
         if (!genero) {
             return res.status(404).json({ message: 'genero de pelicula no esta registrado' });
         }
 
-        const generoExists = await Genero.findOne({ name: req.body.name });
-        if (generoExists) {
-            return res.status(400).json({ message: 'El género ya existe' });
-        }
-            genero.name = req.body.name;
-            genero.state = req.body.state;
-            genero.updatedAt =new Date();
-            genero.description = req.body.description;
-
+        genero.name = req.body.name;
+        genero.state = req.body.state;
+        genero.coverImage = req.body.coverImage
+        genero.updatedAt =new Date();
+        genero.description = req.body.description;
         genero = await genero.save();
+
         res.status(201).send(genero);
+
     } catch (error) {
         console.log(error);
         res.status(500).send('Error en el servidor');

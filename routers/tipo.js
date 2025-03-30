@@ -20,6 +20,7 @@ router.post('/', [
 
         let tipo = new Tipo();
             tipo.id = new Tipo()._id;
+            tipo.coverImage = req.body.coverImage
             tipo.name = req.body.name;
             tipo.createdAt =new Date();
             tipo.updatedAt =new Date();
@@ -57,12 +58,8 @@ router.put('/:tipoId', [
             return res.status(404).json({ message: 'El tipo ya esta registrado' });
         }
 
-        const tipoExists = await Tipo.findOne({ name: req.body.name });
-        if (tipoExists) {
-            return res.status(400).json({ message: 'El tipo ya existe' });
-        }
-
             tipo.name = req.body.name;
+            tipo.coverImage = req.body.coverImage
             tipo.updatedAt =new Date();
             tipo.description = req.body.description;
 

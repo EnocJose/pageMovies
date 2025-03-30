@@ -16,13 +16,14 @@ router.post('/', [
 
         const productoraExists = await Productora.findOne({ name: req.body.name });
         if (productoraExists) {
-            return res.status(400).json({ message: 'El género ya existe' });
+            return res.status(400).json({ message: 'la productora ya existe' });
         }
 
         let productora = new Productora();
             productora.id = new Productora()._id;
             productora.name = req.body.name;
             productora.state = req.body.state;
+            productora.coverImage = req.body.coverImage
             productora.slogan = req.body.slogan;
             productora.createdAt =new Date();
             productora.updatedAt =new Date();
@@ -61,13 +62,9 @@ router.put('/:productoraId', [
             return res.status(404).json({ message: 'productora no esta registrada' });
         }
 
-        const productoraExists = await Productora.findOne({ name: req.body.name });
-        if (productoraExists) {
-            return res.status(400).json({ message: 'La productora ya existe' });
-        }
-
             productora.name = req.body.name;
             productora.state = req.body.state;
+            productora.coverImage = req.body.coverImage
             productora.slogan = req.body.slogan;
             productora.updatedAt =new Date();
             productora.description = req.body.description;
